@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>2026 반도체 부트캠프 잡페어 | 경기과학기술대학교</title>
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js"></script>
+<style>
+:root {
+  --navy:   #0D1B3E;
+  --blue:   #2563EB;
+  --teal:   #0EA5A0;
+  --yellow: #FEE500;
+  --bg:     #F0F4FB;
+  --card:   #FFFFFF;
+  --text:   #111827;
+  --sub:    #6B7280;
+  --border: #E5E9F2;
+  --danger: #DC2626;
+  --r:      14px;
+  --sh:     0 2px 20px rgba(13,27,62,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* ─── HEADER ─────────────────────────── */
+.hd{
+  background:var(--navy);color:#fff;
+  padding:30px 20px 26px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.hd::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,.07) 1px,transparent 1px);
+  background-size:22px 22px;
+}
+.hd-badge{
+  display:inline-block;font-size:10px;font-weight:700;letter-spacing:.12em;
+  color:var(--teal);border:1px solid rgba(14,165,160,.4);
+  padding:3px 10px;border-radius:999px;margin-bottom:10px;position:relative;
+}
+.hd h1{font-size:19px;font-weight:800;line-height:1.4;letter-spacing:-.02em;position:relative;}
+.hd-school{font-size:11px;color:rgba(255,255,255,.5);margin-top:5px;position:relative;}
+
+/* ─── STEPPER ─────────────────────────── */
+.stp{display:flex;align-items:center;justify-content:center;padding:20px 28px 0;}
+.stp-item{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.stp-dot{
+  width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;
+  background:var(--border);color:var(--sub);transition:all .3s;
+}
+.stp-dot.active{background:var(--blue);color:#fff;}
+.stp-dot.done{background:var(--teal);color:#fff;}
+.stp-lbl{font-size:10px;color:var(--sub);font-weight:600;}
+.stp-line{flex:1;height:2px;background:var(--border);margin:0 4px 16px;transition:background .3s;}
+.stp-line.done{background:var(--teal);}
+
+/* ─── WRAP / CARD ─────────────────────── */
+.wrap{max-width:460px;margin:0 auto;padding:16px 14px 64px;}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:22px;margin-top:14px;}
+
+/* ─── STEP AUTH ────────────────────────── */
+.auth-icon{text-align:center;font-size:44px;margin-bottom:14px;}
+.auth-ttl{font-size:17px;font-weight:700;text-align:center;margin-bottom:6px;}
+.auth-desc{font-size:13px;color:var(--sub);text-align:center;line-height:1.65;margin-bottom:18px;}
+.infobox{background:#F7F9FF;border-radius:10px;padding:12px 14px;margin-bottom:18px;}
+.infobox li{font-size:12px;color:var(--sub);list-style:none;padding:3px 0 3px 18px;position:relative;line-height:1.5;}
+.infobox li::before{content:'✓';position:absolute;left:0;color:var(--teal);font-weight:700;}
+
+/* ─── KAKAO BTN ────────────────────────── */
+.kakao-btn{
+  width:100%;height:50px;border:none;border-radius:11px;
+  background:var(--yellow);color:#181600;
+  font-size:15px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  cursor:pointer;transition:filter .15s;
+}
+.kakao-btn:active{filter:brightness(.93);}
+
+/* ─── FORM ──────────────────────────────── */
+.verified-bar{
+  display:flex;align-items:center;gap:7px;
+  background:#FEFCE8;border:1px solid #FDE68A;
+  border-radius:9px;padding:9px 13px;
+  font-size:12px;font-weight:600;color:#78350F;
+  margin-bottom:16px;
+}
+label{display:block;font-size:13px;font-weight:700;margin-bottom:5px;}
+.field{margin-bottom:15px;}
+input{
+  width:100%;height:48px;
+  border:1.5px solid var(--border);border-radius:10px;
+  padding:0 14px;font-size:15px;color:var(--text);
+  background:#fff;outline:none;-webkit-appearance:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1);}
+.ferr{font-size:11px;color:var(--danger);margin-top:4px;display:none;}
+.primary-btn{
+  width:100%;height:50px;border:none;border-radius:11px;
+  background:var(--blue);color:#fff;
+  font-size:15px;font-weight:700;cursor:pointer;margin-top:4px;
+  transition:background .15s;
+}
+.primary-btn:active{background:#1D4ED8;}
+.primary-btn:disabled{background:#BFCFEF;cursor:default;}
+
+/* ─── SUCCESS ───────────────────────────── */
+.suc-wrap{text-align:center;padding:4px 0;}
+.suc-icon{
+  width:68px;height:68px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--teal));
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 18px;font-size:30px;color:#fff;
+  box-shadow:0 8px 24px rgba(37,99,235,.25);
+}
+.suc-ttl{font-size:20px;font-weight:800;margin-bottom:6px;}
+.suc-sub{font-size:13px;color:var(--sub);line-height:1.65;margin-bottom:20px;}
+.suc-info{
+  background:linear-gradient(135deg,#EFF6FF,#ECFDF5);
+  border-radius:11px;padding:14px;text-align:left;margin-bottom:18px;
+}
+.suc-info .row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;}
+.suc-info .row .lbl{color:var(--sub);}
+.suc-info .row .val{font-weight:700;}
+.ghost-btn{
+  width:100%;height:46px;border:1.5px solid var(--border);
+  border-radius:10px;background:#fff;color:var(--sub);
+  font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;
+}
+
+/* ─── ADMIN ─────────────────────────────── */
+.admin-link{text-align:center;margin-top:22px;}
+.admin-link a{font-size:11px;color:var(--sub);text-decoration:none;border-bottom:1px dashed var(--border);}
+.top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.top-row h2{font-size:17px;font-weight:700;}
+.btn-group{display:flex;gap:6px;}
+.sm-btn{
+  border:1.5px solid var(--border);background:#fff;
+  border-radius:8px;padding:6px 11px;
+  font-size:12px;font-weight:600;cursor:pointer;color:var(--text);
+}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px;margin-bottom:12px;}
+.stat{background:var(--card);border-radius:12px;box-shadow:var(--sh);padding:13px 10px;text-align:center;}
+.stat .num{font-size:26px;font-weight:800;color:var(--blue);}
+.stat .lbl{font-size:10px;color:var(--sub);margin-top:1px;}
+.rt-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--teal);font-weight:600;}
+.rt-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 1.4s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{text-align:left;padding:8px 6px;border-bottom:2px solid var(--border);color:var(--sub);font-size:11px;font-weight:700;white-space:nowrap;}
+td{padding:9px 6px;border-bottom:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+.qr-card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:18px;text-align:center;margin-top:14px;}
+#qrcode{display:inline-block;margin:8px 0;}
+.qr-url{font-size:11px;color:var(--sub);word-break:break-all;margin-top:4px;}
+.empty{text-align:center;color:var(--sub);font-size:13px;padding:28px 0;}
+.admin-pw-wrap{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 20px;text-align:center;
+}
+.admin-pw-wrap h3{font-size:16px;font-weight:700;margin-bottom:16px;}
+.admin-pw-wrap input{max-width:260px;}
+.admin-pw-wrap button{max-width:260px;margin-top:10px;}
+
+/* ─── VISIBILITY ────────────────────────── */
+.hidden{display:none!important;}
+#step-auth,#step-form,#step-success,#step-admin{display:none;}
+#step-auth.active,#step-form.active,#step-success.active,#step-admin.active{display:block;}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <div class="hd-badge">2026 SEMICONDUCTOR BOOTCAMP JOB FAIR</div>
+  <h1>반도체 부트캠프<br>잡페어 참가 등록</h1>
+  <div class="hd-school">경기과학기술대학교</div>
+</div>
+
+<div class="stp" id="stepper">
+  <div class="stp-item"><div class="stp-dot active" id="dot1">1</div><div class="stp-lbl">본인인증</div></div>
+  <div class="stp-line" id="line1"></div>
+  <div class="stp-item"><div class="stp-dot" id="dot2">2</div><div class="stp-lbl">정보입력</div></div>
+  <div class="stp-line" id="line2"></div>
+  <div class="stp-item"><div class="stp-dot" id="dot3">3</div><div class="stp-lbl">등록완료</div></div>
+</div>
+
+<div class="wrap">
+
+  <!-- STEP 1: 카카오 본인인증 -->
+  <div id="step-auth" class="active">
+    <div class="card">
+      <div class="auth-icon">🔐</div>
+      <div class="auth-ttl">카카오 본인인증</div>
+      <div class="auth-desc">잡페어 참가 등록을 위해<br>카카오톡으로 본인인증을 진행해 주세요.</div>
+      <ul class="infobox">
+        <li>중복 등록 방지를 위해 인증이 필요합니다</li>
+        <li>인증 후 이름·학과·연락처를 직접 입력합니다</li>
+        <li>개인정보는 행사 운영 목적으로만 활용됩니다</li>
+      </ul>
+      <button class="kakao-btn" id="kakaoAuthBtn">
+        <span>💬</span> 카카오로 본인인증 시작
+      </button>
+    </div>
+    <div class="admin-link"><a href="#" id="goAdmin">관리자</a></div>
+  </div>
+
+  <!-- STEP 2: 정보 입력 -->
+  <div id="step-form">
+    <div class="card">
+      <div class="verified-bar">💛 카카오 본인인증 완료</div>
+      <div class="field">
+        <label for="inp-name">이름 <span style="color:var(--danger)">*</span></label>
+        <input type="text" id="inp-name" placeholder="홍길동" autocomplete="name">
+        <div class="ferr" id="err-name">이름을 입력해 주세요</div>
+      </div>
+      <div class="field">
+        <label for="inp-dept">학과 <span style="color:var(--danger)">*</span></label>
+        <input type="text" id="inp-dept" placeholder="반도체공학과">
+        <div class="ferr" id="err-dept">학과를 입력해 주세요</div>
+      </div>
+      <div class="field">
+        <label for="inp-phone">연락처 <span style="color:var(--danger)">*</span></label>
+        <input type="tel" id="inp-phone" placeholder="010-0000-0000" autocomplete="tel">
+        <div class="ferr" id="err-phone">올바른 연락처를 입력해 주세요</div>
+      </div>
+      <button class="primary-btn" id="submitBtn">참가 등록하기</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: 등록완료 -->
+  <div id="step-success">
+    <div class="card">
+      <div class="suc-wrap">
+        <div class="suc-icon">✓</div>
+        <div class="suc-ttl">등록 완료!</div>
+        <div class="suc-sub" id="suc-sub">잡페어 참가 등록이 완료되었습니다.<br>행사장에서 뵙겠습니다 🎉</div>
+        <div class="suc-info" id="suc-info"></div>
+        <button class="ghost-btn" id="backBtn">다시 처음으로</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="step-admin">
+    <div class="top-row">
+      <h2>관리자 대시보드</h2>
+      <div class="btn-group">
+        <button class="sm-btn" id="exportBtn">CSV</button>
+        <button class="sm-btn" id="refreshBtn">새로고침</button>
+        <button class="sm-btn" id="closeAdmin">닫기</button>
+      </div>
+    </div>
+
+    <div class="qr-card">
+      <div style="font-size:12px;color:var(--sub);margin-bottom:4px;">참가자 등록 QR코드</div>
+      <div id="qrcode"></div>
+      <div class="qr-url" id="qrUrl"></div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat"><div class="num" id="stat-total">—</div><div class="lbl">총 등록</div></div>
+      <div class="stat"><div class="num" id="stat-today">—</div><div class="lbl">오늘 등록</div></div>
+      <div class="stat"><div class="num" id="stat-hour">—</div><div class="lbl">최근 1시간</div></div>
+    </div>
+
+    <div class="card" style="padding:14px;">
+      <div class="top-row" style="margin-bottom:10px;">
+        <span style="font-size:13px;font-weight:700;">참가자 명단</span>
+        <span class="rt-badge"><span class="rt-dot"></span>실시간</span>
+      </div>
+      <div class="tbl-wrap" id="tbl-wrap">
+        <div class="empty">불러오는 중...</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* ========== 설정 ========== */
+const KAKAO_JS_KEY  = "dd00559b0406a0d0777dca32e54fa0bf";
+const KAKAO_REST_KEY = "35072037ef17dbeb508def6286823dd4";
+const SHEET_API_URL  = "여기에_새_Apps_Script_URL_입력";  // ← 새로 배포 후 URL 입력
+const ADMIN_PW       = "gist2026";  // ← 관리자 비밀번호 (변경 가능)
+const REDIRECT_URI   = location.origin + location.pathname;
+
+/* ========== 카카오 SDK ========== */
+try { if(window.Kakao && !Kakao.isInitialized()) Kakao.init(KAKAO_JS_KEY); } catch(e){}
+
+/* ========== 스텝 전환 ========== */
+function showStep(id) {
+  ["step-auth","step-form","step-success","step-admin"].forEach(s => {
+    document.getElementById(s).classList.toggle("active", s === id);
+  });
+  document.getElementById("stepper").style.display = id === "step-admin" ? "none" : "flex";
+  const n = {auth:1, form:2, success:3}[id.replace("step-","")];
+  if (!n) return;
+  [1,2,3].forEach(i => {
+    document.getElementById("dot"+i).className = "stp-dot"+(i<n?" done":i===n?" active":"");
+  });
+  [1,2].forEach(i => {
+    document.getElementById("line"+i).className = "stp-line"+(i<n?" done":"");
+  });
+}
+
+/* ========== 초기화: URL 파라미터 확인 ========== */
+(function init(){
+  const p = new URLSearchParams(location.search);
+  if (p.get("error")) {
+    history.replaceState({}, "", REDIRECT_URI);
+    showStep("step-auth");
+  } else if (p.get("code")) {
+    sessionStorage.setItem("kCode", p.get("code"));
+    history.replaceState({}, "", REDIRECT_URI);
+    showStep("step-form");
+  } else if (p.get("admin") === "1") {
+    promptAdmin();
+  } else {
+    showStep("step-auth");
+  }
+})();
+
+/* ========== Step 1: 카카오 인증 ========== */
+document.getElementById("kakaoAuthBtn").addEventListener("click", function(){
+  if (!window.Kakao || !Kakao.isInitialized()) {
+    alert("카카오 SDK를 불러오지 못했어요. 잠시 후 다시 시도해 주세요."); return;
+  }
+  Kakao.Auth.authorize({ redirectUri: REDIRECT_URI, scope: "" });
+});
+
+/* ========== Step 2: 등록 제출 ========== */
+function validatePhone(v){ return /^0\d{1,2}-?\d{3,4}-?\d{4}$/.test(v.trim()); }
+
+document.getElementById("submitBtn").addEventListener("click", async function(){
+  const name  = document.getElementById("inp-name").value.trim();
+  const dept  = document.getElementById("inp-dept").value.trim();
+  const phone = document.getElementById("inp-phone").value.trim();
+  const code  = sessionStorage.getItem("kCode");
+
+  document.getElementById("err-name").style.display  = name ? "none" : "block";
+  document.getElementById("err-dept").style.display  = dept ? "none" : "block";
+  const pOk = validatePhone(phone);
+  document.getElementById("err-phone").style.display = pOk  ? "none" : "block";
+  if (!name || !dept || !pOk) return;
+
+  if (!code) {
+    alert("카카오 인증이 만료되었어요. 다시 인증해 주세요.");
+    showStep("step-auth"); return;
+  }
+
+  const btn = this;
+  btn.disabled = true; btn.textContent = "등록 중...";
+
+  try {
+    const res  = await fetch(SHEET_API_URL, {
+      method: "POST",
+      headers: {"Content-Type": "text/plain;charset=utf-8"},
+      body: JSON.stringify({ action:"register", kakaoCode:code, kakaoRedirectUri:REDIRECT_URI,
+                             kakaoRestKey:KAKAO_REST_KEY, name, dept, phone, createdAt:Date.now() })
+    });
+    const data = await res.json();
+
+    if (data.result === "duplicate") {
+      alert("이미 등록된 카카오 계정입니다."); sessionStorage.removeItem("kCode");
+      showStep("step-auth"); return;
+    }
+    if (data.result !== "success") throw new Error(data.message || "등록 실패");
+
+    sessionStorage.removeItem("kCode");
+    document.getElementById("suc-sub").textContent = name + "님의 참가 등록이 완료되었습니다!";
+    document.getElementById("suc-info").innerHTML =
+      `<div class="row"><span class="lbl">이름</span><span class="val">${esc(name)}</span></div>
+       <div class="row"><span class="lbl">학과</span><span class="val">${esc(dept)}</span></div>
+       <div class="row"><span class="lbl">연락처</span><span class="val">${esc(phone)}</span></div>`;
+    showStep("step-success");
+  } catch(err){
+    console.error(err);
+    alert("등록 중 오류가 발생했어요.\n" + (err.message || "다시 시도해 주세요."));
+  } finally {
+    btn.disabled = false; btn.textContent = "참가 등록하기";
+  }
+});
+
+document.getElementById("backBtn").addEventListener("click", () => showStep("step-auth"));
+
+/* ========== 관리자 ========== */
+function promptAdmin(){
+  const pw = prompt("관리자 비밀번호:");
+  if (pw === ADMIN_PW) openAdmin();
+  else if (pw !== null) { alert("비밀번호가 올바르지 않습니다."); showStep("step-auth"); }
+  else showStep("step-auth");
+}
+
+document.getElementById("goAdmin").addEventListener("click", function(e){
+  e.preventDefault(); promptAdmin();
+});
+document.getElementById("closeAdmin").addEventListener("click", function(){
+  clearInterval(window._adminTimer); showStep("step-auth");
+});
+document.getElementById("refreshBtn").addEventListener("click", loadData);
+document.getElementById("exportBtn").addEventListener("click", exportCSV);
+
+let cached = [];
+
+function openAdmin(){
+  showStep("step-admin");
+  renderQR();
+  loadData();
+  window._adminTimer = setInterval(loadData, 30000);
+}
+
+function renderQR(){
+  document.getElementById("qrcode").innerHTML = "";
+  document.getElementById("qrUrl").textContent = REDIRECT_URI;
+  if (window.QRCode) new QRCode(document.getElementById("qrcode"),
+    { text:REDIRECT_URI, width:160, height:160, colorDark:"#0D1B3E", colorLight:"#fff" });
+}
+
+async function loadData(){
+  const wrap = document.getElementById("tbl-wrap");
+  try {
+    const res  = await fetch(SHEET_API_URL + "?action=entries&t=" + Date.now());
+    const data = await res.json();
+    const entries = (data.entries || []).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+    cached = entries;
+
+    const now = new Date(), todayStr = now.toDateString(), hourAgo = now - 3600000;
+    document.getElementById("stat-total").textContent = entries.length;
+    document.getElementById("stat-today").textContent = entries.filter(e=>new Date(e.createdAt).toDateString()===todayStr).length;
+    document.getElementById("stat-hour").textContent  = entries.filter(e=>new Date(e.createdAt)>hourAgo).length;
+
+    if (!entries.length){ wrap.innerHTML='<div class="empty">아직 등록된 참가자가 없습니다</div>'; return; }
+
+    let html = '<table><tr><th>#</th><th>이름</th><th>학과</th><th>연락처</th><th>등록시각</th></tr>';
+    entries.forEach((en,i)=>{
+      const d = new Date(en.createdAt);
+      const t = `${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+      html += `<tr><td style="color:var(--sub);font-size:11px">${entries.length-i}</td><td><b>${esc(en.name)}</b></td><td>${esc(en.dept)}</td><td>${esc(en.phone)}</td><td style="color:var(--sub);white-space:nowrap">${t}</td></tr>`;
+    });
+    html += "</table>";
+    wrap.innerHTML = html;
+  } catch(err){
+    wrap.innerHTML = '<div class="empty">데이터를 불러오지 못했습니다</div>';
+    console.error(err);
+  }
+}
+
+function exportCSV(){
+  if (!cached.length){ alert("내보낼 데이터가 없습니다."); return; }
+  let csv = "번호,이름,학과,연락처,등록시각\n";
+  cached.forEach((en,i)=>{
+    const d = new Date(en.createdAt);
+    const dt = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+    csv += `${cached.length-i},"${en.name}","${en.dept}","${en.phone}","${dt}"\n`;
+  });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"}));
+  a.download = "잡페어_참가자_"+new Date().toISOString().slice(0,10)+".csv";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
+</script>
+</body>
+</html>
