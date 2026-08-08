@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>2026 반도체 부트캠프 잡페어 | 경기과학기술대학교</title>
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root {
   --navy:   #0D1B3E;
@@ -166,13 +167,69 @@ tr:last-child td{border-bottom:none;}
 .admin-pw-wrap input{max-width:260px;}
 .admin-pw-wrap button{max-width:260px;margin-top:10px;}
 
+/* ─── LANDING ───────────────────────────── */
+.landing{
+  min-height:100vh;
+  background:var(--navy);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:32px 24px 40px;text-align:center;color:#fff;
+  position:relative;overflow:hidden;
+}
+.landing::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:22px 22px;pointer-events:none;
+}
+.landing-inner{position:relative;z-index:1;max-width:360px;width:100%;}
+.landing-badge{
+  display:inline-block;font-size:10px;font-weight:700;letter-spacing:.12em;
+  color:var(--teal);border:1px solid rgba(14,165,160,.4);
+  padding:4px 12px;border-radius:999px;margin-bottom:16px;
+}
+.landing-title{font-size:26px;font-weight:900;line-height:1.3;letter-spacing:-.03em;margin-bottom:4px;}
+.landing-school{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:28px;}
+.qr-wrap{
+  background:#fff;border-radius:18px;
+  padding:20px;display:inline-block;
+  box-shadow:0 16px 48px rgba(0,0,0,.35);
+  margin-bottom:24px;
+}
+#landing-qr{display:block;}
+.qr-hint{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:24px;}
+.landing-kakao-btn{
+  width:100%;height:52px;border:none;border-radius:13px;
+  background:var(--yellow);color:#181600;
+  font-size:14px;font-weight:800;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:filter .15s;
+}
+.landing-kakao-btn:active{filter:brightness(.92);}
+
 /* ─── VISIBILITY ────────────────────────── */
 .hidden{display:none!important;}
-#step-auth,#step-form,#step-success,#step-admin{display:none;}
-#step-auth.active,#step-form.active,#step-success.active,#step-admin.active{display:block;}
+#step-landing,#step-auth,#step-form,#step-success,#step-admin{display:none;}
+#step-landing.active,#step-auth.active,#step-form.active,#step-success.active,#step-admin.active{display:block;}
 </style>
 </head>
 <body>
+
+<!-- STEP 0: 랜딩 (행사명 + QR + 등록 버튼) -->
+<div id="step-landing">
+  <div class="landing">
+    <div class="landing-inner">
+      <div class="landing-badge">2026 SEMICONDUCTOR BOOTCAMP JOB FAIR</div>
+      <div class="landing-title">반도체 부트캠프<br>잡페어</div>
+      <div class="landing-school">경기과학기술대학교</div>
+      <div class="qr-wrap">
+        <div id="landing-qr"></div>
+      </div>
+      <div class="qr-hint">📱 QR코드를 스캔하여 공유하거나 아래 버튼으로 바로 등록하세요</div>
+      <button class="landing-kakao-btn" id="landingStartBtn">
+        <span>💬</span> 카카오톡 인증하여 박람회 참여 등록하기
+      </button>
+    </div>
+  </div>
+</div>
 
 <div class="hd">
   <div class="hd-badge">2026 SEMICONDUCTOR BOOTCAMP JOB FAIR</div>
@@ -294,10 +351,13 @@ try { if(window.Kakao && !Kakao.isInitialized()) Kakao.init(KAKAO_JS_KEY); } cat
 
 /* ========== 스텝 전환 ========== */
 function showStep(id) {
-  ["step-auth","step-form","step-success","step-admin"].forEach(s => {
+  ["step-landing","step-auth","step-form","step-success","step-admin"].forEach(s => {
     document.getElementById(s).classList.toggle("active", s === id);
   });
-  document.getElementById("stepper").style.display = id === "step-admin" ? "none" : "flex";
+  const hideStepper = id === "step-admin" || id === "step-landing";
+  document.getElementById("stepper").style.display = hideStepper ? "none" : "flex";
+  // 헤더도 랜딩/어드민일 때 숨기기
+  document.querySelector(".hd").style.display = hideStepper ? "none" : "block";
   const n = {auth:1, form:2, success:3}[id.replace("step-","")];
   if (!n) return;
   [1,2,3].forEach(i => {
@@ -321,9 +381,25 @@ function showStep(id) {
   } else if (p.get("admin") === "1") {
     promptAdmin();
   } else {
-    showStep("step-auth");
+    showStep("step-landing");
   }
 })();
+
+/* ========== 랜딩 QR 생성 ========== */
+(function renderLandingQR(){
+  if (window.QRCode) {
+    new QRCode(document.getElementById("landing-qr"), {
+      text: location.href.split("?")[0],
+      width: 180, height: 180,
+      colorDark: "#0D1B3E", colorLight: "#ffffff"
+    });
+  }
+})();
+
+/* ========== 랜딩 → 인증 ========== */
+document.getElementById("landingStartBtn").addEventListener("click", function(){
+  showStep("step-auth");
+});
 
 /* ========== Step 1: 카카오 인증 ========== */
 document.getElementById("kakaoAuthBtn").addEventListener("click", function(){
