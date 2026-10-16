@@ -1,0 +1,30 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 10,
+  "fps": 30,
+  "canvas": { "w": 1080, "h": 1920, "aspect": "9:16" },
+  "style": "Warm honey-on-charcoal shorts card. Calm focus-pull title, then three springy numbered cards stacked below.",
+  "palette": ["#FFB703", "#FB8500", "#F5EFE6", "#A39A8E", "#26201B", "#14110E"],
+  "font": "Pretendard (local woff2)",
+  "beats": [0.2, 1.6, 2.2, 3.0, 3.8, 6.2, 9.3],
+  "export": "mp4",
+  "asset_needs": [],
+  "block": "focus-blur-resolve + spring-pop (recipes inlined)",
+  "customize": {
+    "title": "focus-blur-resolve recipe: blur 28px -> 0, scale 1.08 -> 1, per-line stagger, Pretendard Black",
+    "cards": "spring-pop recipe: back.out(1.7) from scale 0.86, plus 60px lift, 0.8s apart"
+  },
+  "content": {
+    "scenes": [
+      { "id": "hook", "start": 0, "end": 2.2, "text": "오늘의 꿀팁 3가지", "emphasis_words": ["꿀팁"], "emotion": "inviting", "motion": "fade_blur focus pull per line, underline_sweep under 꿀팁", "beats": [0.2, 1.6] },
+      { "id": "build", "start": 2.2, "end": 6.2, "text": "1 · 2 · 3 cards", "emphasis_words": ["1", "2", "3"], "emotion": "playful", "motion": "scale_punch spring pop per card, badge scale_pulse on land", "beats": [2.2, 3.0, 3.8] },
+      { "id": "punch", "start": 6.2, "end": 9.3, "text": "hold", "emphasis_words": [], "emotion": "settled", "motion": "badge glow ripple 1->2->3, hold_breath on stack", "beats": [6.2] },
+      { "id": "resolve", "start": 9.3, "end": 10, "text": "exit", "emphasis_words": [], "emotion": "close", "motion": "fade_out", "beats": [9.3] }
+    ],
+    "cards": [
+      { "n": 1, "title": "아침엔 물 한 잔부터", "sub": "공복 수분 보충으로 몸을 깨워요" },
+      { "n": 2, "title": "25분 집중, 5분 휴식", "sub": "뽀모도로로 집중력을 오래 유지해요" },
+      { "n": 3, "title": "자기 전 30분 화면 끄기", "sub": "블루라이트를 줄이면 잠이 깊어져요" }
+    ]
+  }
+}
